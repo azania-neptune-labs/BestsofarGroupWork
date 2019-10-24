@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Scalp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<!--
+<script type="text/javascript">
+function printIt(){
+document.getElementById('output').value= result
+}
+</script>
+-->
+</head>
+<body>
+  <script type="text/javascript">
+        function upload() {
+            const reader = new FileReader();
+            
+            reader.onloadend = function () {
+                const ipfs = window.IpfsApi('localhost', 5001)   // Connect to IPFS
+                const buf = buffer.Buffer(reader.result)    // Convert data into buffer
+                ipfs.files.add(buf, (err, result) => {   // Upload buffer to IPFS
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                    console.log("result is", result);
+                    let url = "https://ipfs.io/ipfs/" + result[0].hash;
+                    console.log("Url -->", url);
+                    document.getElementById("url").innerHTML = url
+                    document.getElementById("url").href = url
+                    //document.getElementById("output").src = url
+                })
+            }
+            const photo = document.getElementById("photo");
+            reader.readAsArrayBuffer(photo.files[0]);     //Read Provided File
+            //push reslt to input box to send the files to the cloud.
+            document.getElementById('output').value= result
+        }
+    </script>
+    <a id="url"></a>
+    <!--<img id="output">-->
+    <form action="">
+<input type="text" id="output"><input type="button" onclick="printIt();" value="Go">
+</form>
+
+</body>
+</html>
